@@ -11,26 +11,28 @@ args = parser.parse_args()
 
 charlines = []
 
-for fi in os.listdir('.'):
-    with io.open(fi, 'r', errors='replace') as f:
-        lines = f.readlines()
-        cursor = False
-        sentence = ''
-        for line in lines:
-            if str(args.character).upper() in line and len(line.split('\t')) == 6:
-                cursor = True
-                continue
-            if cursor and len(line.split('\t')) == 4:
-                if len(sentence) == 0:
-                    sentence += line.replace('\t', '').rstrip()
-                else:
-                    sentence += ' '+line.replace('\t', '').rstrip()
-            if cursor and len(line.split('\t')) == 5:
-                continue
-            if cursor and len(line.split('\t')) != 4:
-                cursor = False
-                charlines.append(sentence)
-                sentence = ''
+for episode in os.listdir('.'):
+    if episode.endswith('.txt'):
+        with io.open(episode, 'r', errors='replace') as f:
+            lines = f.readlines()
+            cursor = False
+            sentence = ''
+            for l in lines:
+                line = l.split('\t')
+                if str(args.character).upper() in l and len(line) == 6:
+                    cursor = True
+                    continue
+                if cursor:
+                    if len(line) == 4:
+                        if len(sentence) != 0:
+                            sentence += ' '
+                        sentence += l.replace('\t', '').rstrip()
+                    elif len(line) == 5:
+                        continue
+                    else:
+                        cursor = False
+                        charlines.append(sentence)
+                        sentence = ''
 
 if args.file:
     with open(args.file, 'w') as f:
