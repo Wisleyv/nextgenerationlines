@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--character', help='Character you want to search for', default='PICARD')
+parser.add_argument('--character', help='Character you want to search for. Default is "picard"', default='PICARD')
 parser.add_argument('--file', help='Write lines to a file')
 
 args = parser.parse_args()
